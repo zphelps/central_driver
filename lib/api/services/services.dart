@@ -42,14 +42,66 @@ class ServiceApi {
     }
   }
 
+  Future exitService(String serviceID) async {
+    try {
+      await supabase
+          .from('client_services')
+          .update({
+            'status': 'incomplete',
+            'step': 3
+          })
+          .eq('id', serviceID);
+      await supabase
+          .from('organizational_users')
+          .update({
+            'current_service_id': null,
+          })
+          .eq('id', supabase.auth.currentUser!.id);
+    } catch (e) {
+      throw StateError("Error exiting service: ${e.toString()}");
+    }
+  }
+
   Future completeService(String serviceID) async {
     try {
+      //get service
+      final service = await supabase
+          .from('client_services')
+          .select('id, job:job_id(*)')
+          .eq('id', serviceID)
+          .single();
+
+      print(service);
+
+      // get bins
+      final bins = await supabase
+          .from('service_bins')
+          .select('id, initial_fill_level, final_fill_level')
+          .eq('service_id', serviceID);
+
+      double? num_units_to_charge = null;
+
+      if (service['job']['charge_unit'] == '% Compacted') {
+        num_units_to_charge = 0.0;
+        for (var bin in bins) {
+          final perCompacted = (bin['initial_fill_level'] as int) - (bin['final_fill_level'] as int);
+          num_units_to_charge = num_units_to_charge! + (perCompacted / 100);
+        }
+      } else if (service['job']['charge_unit'] == 'Bin') {
+        num_units_to_charge = bins.length + 0.0;
+      } else if (service['job']['charge_unit'] == 'Hour') {
+        num_units_to_charge = (service['duration'] as int) / 60;
+      }
+
+      print(num_units_to_charge);
+
       await supabase
           .from('client_services')
           .update({
             'step': 3,
             'status': 'completed',
             'completed_on': DateTime.now().toIso8601String(),
+            'num_units_to_charge': num_units_to_charge,
           })
           .eq('id', serviceID);
       await supabase
@@ -125,7 +177,7 @@ class ServiceApi {
         .select('*, '
             'location:location_id(*), '
             'job:job_id(*, service_type), '
-            'client:client_id(*, type:type_id(*)), '
+            'client:client_id(*), '
             'on_site_contact:on_site_contact_id(*), '
             'organization:organization_id(*), '
             'truck:truck_id(*, driver:driver_id(*))')
@@ -138,7 +190,7 @@ class ServiceApi {
         .lte('timestamp', endOfDay.toUtc())
         .order('timestamp', ascending: true);
     if (res == null) {
-      throw StateError("Error fetching work orders");
+      throw StateError("Error fetching services");
     } else {
       return res.map<Service>((e) {
         print(e['client']);
@@ -155,7 +207,7 @@ class ServiceApi {
         .select('*, '
         'location:location_id(*), '
         'job:job_id(*, service_type), '
-        'client:client_id(*, type:type_id(*)), '
+        'client:client_id(*), '
         'on_site_contact:on_site_contact_id(*), '
         'organization:organization_id(*), '
         'truck:truck_id(*, driver:driver_id(*))')

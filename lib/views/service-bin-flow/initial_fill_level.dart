@@ -137,7 +137,7 @@ class _InitialFillLevelState extends State<InitialFillLevel> {
                                         binID: widget.bin.id,
                                         imageColumnID: 'initial_fill_image',
                                         imagePath:
-                                        'compaction_images/before/${widget.serviceID}'),
+                                        'compaction_images/before/${widget.bin.id}'),
                                     fullscreenDialog: true));
                                 setState(() {
                                   signedURL = url;
@@ -160,7 +160,7 @@ class _InitialFillLevelState extends State<InitialFillLevel> {
                                       binID: widget.bin.id,
                                       imageColumnID: 'initial_fill_image',
                                       imagePath:
-                                      'compaction_images/before/${widget.serviceID}'),
+                                      'compaction_images/before/${widget.bin.id}'),
                                   fullscreenDialog: true));
                               setState(() {
                                 signedURL = url;

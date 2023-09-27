@@ -130,7 +130,7 @@ class _BinPhotosState extends State<BinPhotos> {
                                       binID: widget.bin.id,
                                       imageColumnID: 'left_image',
                                       imagePath:
-                                          'before_images/${widget.bin.service_id}_left_image'),
+                                          'before_images/${widget.bin.id}_left_image'),
                                   fullscreenDialog: true));
                               _updateNextEnabled();
                             },
@@ -168,7 +168,7 @@ class _BinPhotosState extends State<BinPhotos> {
                                       binID: widget.bin.id,
                                       imageColumnID: 'back_image',
                                       imagePath:
-                                      'before_images/${widget.bin.service_id}_back_image'),
+                                      'before_images/${widget.bin.id}_back_image'),
                                   fullscreenDialog: true));
                               _updateNextEnabled();
                             },
@@ -212,7 +212,7 @@ class _BinPhotosState extends State<BinPhotos> {
                                       binID: widget.bin.id,
                                       imageColumnID: 'front_image',
                                       imagePath:
-                                      'before_images/${widget.bin.service_id}_front_image'),
+                                      'before_images/${widget.bin.id}_front_image'),
                                   fullscreenDialog: true));
                               _updateNextEnabled();
                             },
@@ -250,7 +250,7 @@ class _BinPhotosState extends State<BinPhotos> {
                                       binID: widget.bin.id,
                                       imageColumnID: 'right_image',
                                       imagePath:
-                                      'before_images/${widget.bin.service_id}_right_image'),
+                                      'before_images/${widget.bin.id}_right_image'),
                                   fullscreenDialog: true));
                               _updateNextEnabled();
                             },

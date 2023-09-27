@@ -27,7 +27,11 @@ class _ServiceBinsState extends ConsumerState<ServiceBins> {
         ref.watch(serviceBinsStreamProvider(widget.serviceID));
     return Scaffold(
       appBar: AppBar(
-        title: Text('SER-${widget.serviceID.split('-')[0].toUpperCase()}', style: const TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold)),
+        title: Text('SER-${widget.serviceID.split('-')[0].toUpperCase()}',
+            style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.bold)),
         backgroundColor: Colors.grey[50],
         toolbarHeight: 45,
         automaticallyImplyLeading: false,
@@ -43,6 +47,34 @@ class _ServiceBinsState extends ConsumerState<ServiceBins> {
                 .update((profile) => profile.copyWith(step: 0));
           },
         ),
+        actions: [
+          IconButton(
+            padding: const EdgeInsets.only(right: 8),
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              showPlatformDialog(
+                context: context,
+                builder: (c) => PlatformAlertDialog(
+                  title: const Text('Are you sure?'),
+                  content: const Text('This service will be marked as incomplete.'),
+                  actions: <Widget>[
+                    PlatformDialogAction(child: PlatformText('Cancel'), onPressed: () => Navigator.pop(c)),
+                    PlatformDialogAction(
+                      child: PlatformText('Exit', style: const TextStyle(color: Colors.red)),
+                      onPressed: () async {
+                        Navigator.pop(c);
+                        setState(() {
+                          _loading = true;
+                        });
+                        await ServiceApi().exitService(widget.serviceID);
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -72,32 +104,30 @@ class _ServiceBinsState extends ConsumerState<ServiceBins> {
                     const SizedBox(height: 16),
                     serviceBinsAsyncValue.when(
                       data: (serviceBins) {
-                        if(serviceBins.isEmpty) {
+                        if (serviceBins.isEmpty) {
                           return Center(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const SizedBox(height: 16),
-                                Icon(
-                                  Icons.hourglass_empty,
-                                  size: 60,
-                                  color: Colors.grey.shade400,
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  'No bins added yet.',
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.grey.shade500,
-                                  )
-                                ),
-                                const SizedBox(height: 30),
-                              ]
-                            ),
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const SizedBox(height: 16),
+                                  Icon(
+                                    Icons.hourglass_empty,
+                                    size: 60,
+                                    color: Colors.grey.shade400,
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text('No bins added yet.',
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey.shade500,
+                                      )),
+                                  const SizedBox(height: 30),
+                                ]),
                           );
-                        };
-                        if(serviceBins.isNotEmpty) {
+                        }
+                        ;
+                        if (serviceBins.isNotEmpty) {
                           _nextEnabled = true;
                         }
                         return Expanded(
@@ -123,19 +153,28 @@ class _ServiceBinsState extends ConsumerState<ServiceBins> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8, vertical: 4),
                                             decoration: BoxDecoration(
-                                              color: serviceBins[index].ready_for_haul ?? false
+                                              color: serviceBins[index]
+                                                          .ready_for_haul ??
+                                                      false
                                                   ? Colors.red.shade100
                                                   : Colors.green.shade100,
-                                              borderRadius: BorderRadius.circular(6),
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
                                             ),
                                             child: Text(
-                                              serviceBins[index].ready_for_haul ?? false
+                                              serviceBins[index]
+                                                          .ready_for_haul ??
+                                                      false
                                                   ? 'HAUL NEEDED'
                                                   : 'RECEIVE MORE TRASH',
-                                              style:
-                                              TextStyle(color: serviceBins[index].ready_for_haul ?? false
-                                                  ? Colors.red
-                                                  : Colors.green, fontSize: 12, fontWeight: FontWeight.w700),
+                                              style: TextStyle(
+                                                  color: serviceBins[index]
+                                                              .ready_for_haul ??
+                                                          false
+                                                      ? Colors.red
+                                                      : Colors.green,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w700),
                                             ),
                                           ),
                                         ],
@@ -149,10 +188,14 @@ class _ServiceBinsState extends ConsumerState<ServiceBins> {
                                         children: [
                                           InkWell(
                                             onTap: () async {
-                                              await Navigator.of(context).push(MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      SelectFillPercentage(finalFill: false, bin: serviceBins[index]),
-                                                  fullscreenDialog: true));
+                                              await Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (_) =>
+                                                          SelectFillPercentage(
+                                                              finalFill: false,
+                                                              bin: serviceBins[
+                                                                  index]),
+                                                      fullscreenDialog: true));
                                             },
                                             child: Column(
                                               mainAxisAlignment:
@@ -162,24 +205,30 @@ class _ServiceBinsState extends ConsumerState<ServiceBins> {
                                                   'Initial Fill',
                                                   style: TextStyle(
                                                       fontSize: 13,
-                                                      fontWeight: FontWeight.w600),
+                                                      fontWeight:
+                                                          FontWeight.w600),
                                                 ),
                                                 const SizedBox(height: 8),
                                                 Text(
                                                   '${serviceBins[index].initial_fill_level ?? '0'}%',
                                                   style: const TextStyle(
                                                       fontSize: 16,
-                                                      fontWeight: FontWeight.w600),
+                                                      fontWeight:
+                                                          FontWeight.w600),
                                                 ),
                                               ],
                                             ),
                                           ),
                                           InkWell(
                                             onTap: () async {
-                                              await Navigator.of(context).push(MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      SelectFillPercentage(finalFill: true, bin: serviceBins[index]),
-                                                  fullscreenDialog: true));
+                                              await Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (_) =>
+                                                          SelectFillPercentage(
+                                                              finalFill: true,
+                                                              bin: serviceBins[
+                                                                  index]),
+                                                      fullscreenDialog: true));
                                             },
                                             child: Column(
                                               mainAxisAlignment:
@@ -189,14 +238,16 @@ class _ServiceBinsState extends ConsumerState<ServiceBins> {
                                                   'Final Fill',
                                                   style: TextStyle(
                                                       fontSize: 13,
-                                                      fontWeight: FontWeight.w600),
+                                                      fontWeight:
+                                                          FontWeight.w600),
                                                 ),
                                                 const SizedBox(height: 8),
                                                 Text(
                                                   '${serviceBins[index].final_fill_level ?? '0'}%',
                                                   style: const TextStyle(
                                                       fontSize: 16,
-                                                      fontWeight: FontWeight.w600),
+                                                      fontWeight:
+                                                          FontWeight.w600),
                                                 ),
                                               ],
                                             ),
@@ -209,18 +260,27 @@ class _ServiceBinsState extends ConsumerState<ServiceBins> {
                                           showPlatformDialog(
                                             context: context,
                                             builder: (c) => PlatformAlertDialog(
-                                              title: const Text('Are you sure?'),
-                                              content: const Text('This bin will be deleted.'),
+                                              title:
+                                                  const Text('Are you sure?'),
+                                              content: const Text(
+                                                  'This bin will be deleted.'),
                                               actions: <Widget>[
-                                                PlatformDialogAction(child: PlatformText('Cancel'), onPressed: () => Navigator.pop(c)),
                                                 PlatformDialogAction(
-                                                  child: PlatformText('Delete', style: const TextStyle(color: Colors.red)),
+                                                    child:
+                                                        PlatformText('Cancel'),
+                                                    onPressed: () =>
+                                                        Navigator.pop(c)),
+                                                PlatformDialogAction(
+                                                  child: PlatformText('Delete',
+                                                      style: const TextStyle(
+                                                          color: Colors.red)),
                                                   onPressed: () async {
                                                     Navigator.pop(c);
                                                     setState(() {
                                                       _loading = true;
                                                     });
-                                                    await BinsApi().deleteBin(serviceBins[index].id);
+                                                    await BinsApi().deleteBin(
+                                                        serviceBins[index].id);
                                                     setState(() {
                                                       _loading = false;
                                                     });
@@ -234,25 +294,27 @@ class _ServiceBinsState extends ConsumerState<ServiceBins> {
                                           width: double.infinity,
                                           padding: const EdgeInsets.all(10),
                                           decoration: BoxDecoration(
-                                            border: Border.all(color: Colors.grey.shade300, width: 1),
-                                            borderRadius: BorderRadius.circular(6),
+                                            border: Border.all(
+                                                color: Colors.grey.shade300,
+                                                width: 1),
+                                            borderRadius:
+                                                BorderRadius.circular(6),
                                           ),
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
-                                              Icon(
-                                                  Icons.delete,
+                                              Icon(Icons.delete,
                                                   size: 16,
-                                                  color: Colors.grey.shade500
-                                              ),
+                                                  color: Colors.grey.shade500),
                                               const SizedBox(width: 8),
                                               Text(
                                                 'Delete',
                                                 style: TextStyle(
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.w500,
-                                                    color: Colors.grey.shade600
-                                                ),
+                                                    color:
+                                                        Colors.grey.shade600),
                                               ),
                                             ],
                                           ),
@@ -266,11 +328,11 @@ class _ServiceBinsState extends ConsumerState<ServiceBins> {
                           ),
                         );
                       },
-                      loading: () =>
-                          const Center(child: Padding(
-                            padding: EdgeInsets.only(bottom: 50),
-                            child: CircularProgressIndicator(),
-                          )),
+                      loading: () => const Center(
+                          child: Padding(
+                        padding: EdgeInsets.only(bottom: 50),
+                        child: CircularProgressIndicator(),
+                      )),
                       error: (e, s) => Center(child: Text(e.toString())),
                     ),
                     InkWell(
@@ -293,30 +355,26 @@ class _ServiceBinsState extends ConsumerState<ServiceBins> {
                           });
                           print(e);
                         }
-
                       },
                       child: Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade400, width: 1),
+                          border:
+                              Border.all(color: Colors.grey.shade400, width: 1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              Icons.add,
-                              color: Colors.grey.shade600
-                            ),
+                            Icon(Icons.add, color: Colors.grey.shade600),
                             const SizedBox(width: 8),
                             Text(
                               'Add Bin',
                               style: TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.w600,
-                                  color: Colors.grey.shade600
-                              ),
+                                  color: Colors.grey.shade600),
                             ),
                           ],
                         ),
@@ -331,7 +389,9 @@ class _ServiceBinsState extends ConsumerState<ServiceBins> {
                   right: 0,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: _nextEnabled ? Theme.of(context).colorScheme.primary : Colors.grey[300],
+                      backgroundColor: _nextEnabled
+                          ? Theme.of(context).colorScheme.primary
+                          : Colors.grey[300],
                       elevation: 0,
                       shadowColor: Colors.transparent,
                     ),
@@ -342,7 +402,8 @@ class _ServiceBinsState extends ConsumerState<ServiceBins> {
                       });
                       try {
                         await ServiceApi().completeService(widget.serviceID);
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
                           backgroundColor: Colors.green,
                           content: Text('Service Completed!',
                               style: TextStyle(

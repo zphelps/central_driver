@@ -134,7 +134,7 @@ class _FinalFillLevelState extends State<FinalFillLevel> {
                                         binID: widget.bin.id,
                                         imageColumnID: 'final_fill_image',
                                         imagePath:
-                                        'compaction_images/after/${widget.serviceID}'),
+                                        'compaction_images/after/${widget.bin.id}'),
                                     fullscreenDialog: true));
                                 setState(() {
                                   signedURL = url;
@@ -157,7 +157,7 @@ class _FinalFillLevelState extends State<FinalFillLevel> {
                                       binID: widget.bin.id,
                                       imageColumnID: 'final_fill_image',
                                       imagePath:
-                                      'compaction_images/after/${widget.serviceID}'),
+                                      'compaction_images/after/${widget.bin.id}'),
                                   fullscreenDialog: true));
                               setState(() {
                                 signedURL = url;

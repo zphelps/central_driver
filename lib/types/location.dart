@@ -4,20 +4,14 @@ class Location extends Equatable{
   final String id;
   final String? client_id;
   final String name;
-  final String street_address;
-  final String city;
-  final String state;
-  final int zip;
+  final String formatted_address;
 
 
   const Location({
     required this.id,
     required this.client_id,
     required this.name,
-    required this.street_address,
-    required this.city,
-    required this.state,
-    required this.zip,
+    required this.formatted_address,
   });
 
   @override
@@ -25,10 +19,7 @@ class Location extends Equatable{
     id,
     client_id,
     name,
-    street_address,
-    city,
-    state,
-    zip,
+    formatted_address,
   ];
 
   @override
@@ -42,20 +33,14 @@ class Location extends Equatable{
     final id = data['id'] as String;
     final client_id = data['client_id'] as String?;
     final name = data['name'] as String;
-    final street_address = data['street_address'] as String;
-    final city = data['city'] as String;
-    final state = data['state'] as String;
-    final zip = data['zip'] as int;
+    final formatted_address = data['formatted_address'] as String;
 
 
     return Location(
       id: id,
       client_id: client_id,
       name: name,
-      street_address: street_address,
-      city: city,
-      state: state,
-      zip: zip,
+      formatted_address: formatted_address,
     );
   }
 
@@ -64,10 +49,7 @@ class Location extends Equatable{
       'id': id,
       'client_id': client_id,
       'name': name,
-      'street_address': street_address,
-      'city': city,
-      'state': state,
-      'zip': zip,
+      'formatted_address': formatted_address,
     };
   }
 }

@@ -8,8 +8,8 @@ class Truck extends Equatable{
   final String franchise_id;
   final String name;
   final OrganizationalUser driver;
-  final double latitude;
-  final double longitude;
+  final double? latitude;
+  final double? longitude;
 
   const Truck({
     required this.id,
@@ -45,8 +45,8 @@ class Truck extends Equatable{
     final franchise_id = data['franchise_id'] as String;
     final name = data['name'] as String;
     final driver = OrganizationalUser.fromMap(data['driver']);
-    final latitude = data['latitude'] as double;
-    final longitude = data['longitude'] as double;
+    final latitude = data['latitude'] as double?;
+    final longitude = data['longitude'] as double?;
 
 
     return Truck(

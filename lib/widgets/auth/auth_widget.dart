@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../views/camera/camera.dart';
+import '../../views/demo-camera/demo_camera.dart';
 import '../../views/home/home.dart';
 import '../../views/login/login.dart';
 
@@ -23,16 +25,8 @@ class _AuthWidgetState extends State<AuthWidget> {
   void initState() {
     super.initState();
     _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-      // if (_redirecting) return;
-      // final session = data.session;
-      // if (session == null) {
-      //   _redirecting = true;
-      //   Navigator.of(context).pushReplacementNamed('/login');
-      // }
       print('auth state changed');
-      setState(() {
-
-      });
+      setState(() {});
     });
   }
 
@@ -46,7 +40,7 @@ class _AuthWidgetState extends State<AuthWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: supabase.auth.currentSession != null ? const Home() : const Login(),
+      body: supabase.auth.currentSession != null ? const DemoCamera() : const Login(),
     );
   }
 }

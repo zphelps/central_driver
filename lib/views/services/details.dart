@@ -141,7 +141,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                             children: [
                               const Icon(Icons.handyman_outlined, color: Colors.white),
                               const SizedBox(width: 10),
-                              Text(service.status == 'in-progress' ? 'Resume' : 'Begin Service'),
+                              Text(service.status == 'in-progress' || service.status == 'incomplete' ? 'Resume' : 'Begin Service'),
                             ],
                           ),
                         ),
@@ -173,7 +173,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                   ElevatedButton(
                     onPressed: () {
                       try {
-                        MapsLauncher.launchQuery(service.location.street_address);
+                        MapsLauncher.launchQuery(service.location.formatted_address);
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: const Text('Error launching maps. Please try again.', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),

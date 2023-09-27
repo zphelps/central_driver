@@ -104,7 +104,7 @@ class Service extends Equatable{
     final truck = Truck.fromMap(data['truck']);
     final invoice_id = data['invoice_id'] as String?;
     final completed_on = data['completed_on'] as String?;
-    final num_units_to_charge = data['num_units_to_charge'] as double?;
+    final num_units_to_charge = data['num_units_to_charge']?.toDouble();
     final current_bin_id = data['current_bin_id'] as String?;
     final step = data['step'] as int?;
 

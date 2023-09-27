@@ -51,5 +51,7 @@
 	<string>Please enable camera access to take photos of container.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Please enable camera access to take videos of container.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Please enable library access to we can save your photos.</string>
 </dict>
 </plist>

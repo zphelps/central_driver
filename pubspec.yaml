@@ -46,6 +46,8 @@ dependencies:
   maps_launcher: ^2.2.0
   image_watermark: ^0.0.5
   equatable: ^2.0.5
+  gallery_saver: ^2.3.2
+  path_provider: ^2.1.1
 #  central_data_models:
 #    hosted: https://onepub.dev/api/fffuhnofly
 #    version: ^1.2.4

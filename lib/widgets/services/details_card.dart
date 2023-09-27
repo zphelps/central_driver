@@ -84,7 +84,7 @@ class ServiceDetailsCard extends StatelessWidget {
                     SizedBox(
                       width: MediaQuery.of(context).size.width - 60,
                       child: Text(
-                        service.location.street_address,
+                        service.location.name,
                         style: const TextStyle(
                             fontSize: 16,
                             color: Colors.black
@@ -130,6 +130,33 @@ class ServiceDetailsCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
+                      'DURATION',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[500],
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '${service.duration} minutes',
+                      style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
                       'SUMMARY',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
@@ -140,6 +167,33 @@ class ServiceDetailsCard extends StatelessWidget {
                     const SizedBox(height: 8),
                     Text(
                       service.summary,
+                      style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'DRIVER INSTRUCTIONS',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[500],
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      service.driver_notes ?? 'No instructions provided.',
                       style: const TextStyle(
                           fontSize: 16,
                           color: Colors.black

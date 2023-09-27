@@ -10,7 +10,7 @@ class Client extends Equatable{
   final String franchise_id;
   final String name;
   final String country;
-  final ClientType type;
+  final String type;
   final String status;
   final OrganizationalUser? primary_contact;
   final Location? primary_location;
@@ -60,7 +60,7 @@ class Client extends Equatable{
     final franchise_id = data['franchise_id'] as String;
     final name = data['name'] as String;
     final country = data['country'] as String;
-    final type = ClientType.fromMap(data['type']);
+    final type = data['type'];
     final status = data['status'] as String;
     final primary_contact = data['primary_contact'] != null ? OrganizationalUser.fromMap(data['primary_contact']) : null;
     final primary_location = data['primary_location'] != null ? Location.fromMap(data['primary_location']) : null;
@@ -90,7 +90,7 @@ class Client extends Equatable{
       'franchise_id': franchise_id,
       'name': name,
       'country': country,
-      'type_id': type.id,
+      'type_id': type,
       'status': status,
       'primary_contact_id': primary_contact?.id,
       'primary_location_id': primary_location?.id,

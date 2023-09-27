@@ -41,7 +41,7 @@ class ClientUser extends Equatable{
     final first_name = data['first_name'] as String;
     final last_name = data['last_name'] as String;
     final email = data['email'] as String;
-    final phone_number = data['phone_number'] as int;
+    final phone_number = data['phone'] as int;
 
 
     return ClientUser(
@@ -61,7 +61,7 @@ class ClientUser extends Equatable{
       'first_name': first_name,
       'last_name': last_name,
       'email': email,
-      'phone_number': phone_number,
+      'phone': phone_number,
     };
   }
 }

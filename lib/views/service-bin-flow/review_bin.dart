@@ -153,7 +153,7 @@ class _ReviewBinState extends State<ReviewBin> {
                                                 imageColumnID:
                                                     'initial_fill_image',
                                                 imagePath:
-                                                    'compaction_images/before/${widget.serviceID}'),
+                                                    'compaction_images/before/${widget.bin.id}'),
                                             fullscreenDialog: true));
                                     setState(() {
                                       initialSignedURL = url;
@@ -180,7 +180,7 @@ class _ReviewBinState extends State<ReviewBin> {
                                           binID: widget.bin.id,
                                           imageColumnID: 'initial_fill_image',
                                           imagePath:
-                                              'compaction_images/before/${widget.serviceID}'),
+                                              'compaction_images/before/${widget.bin.id}'),
                                       fullscreenDialog: true));
                               setState(() {
                                 initialSignedURL = url;
@@ -237,7 +237,7 @@ class _ReviewBinState extends State<ReviewBin> {
                                                 imageColumnID:
                                                     'final_fill_image',
                                                 imagePath:
-                                                    'compaction_images/after/${widget.serviceID}'),
+                                                    'compaction_images/after/${widget.bin.id}'),
                                             fullscreenDialog: true));
                                     setState(() {
                                       finalSignedURL = url;
@@ -264,7 +264,7 @@ class _ReviewBinState extends State<ReviewBin> {
                                           binID: widget.bin.id,
                                           imageColumnID: 'final_fill_image',
                                           imagePath:
-                                              'compaction_images/after/${widget.serviceID}'),
+                                              'compaction_images/after/${widget.bin.id}'),
                                       fullscreenDialog: true));
                               setState(() {
                                 finalSignedURL = url;

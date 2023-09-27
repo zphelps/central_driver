@@ -13,7 +13,6 @@ import '../../types/truck.dart';
 import '../service-flow/service-flow.dart';
 import '../services/details.dart';
 
-
 class Home extends ConsumerStatefulWidget {
   const Home({super.key});
 
@@ -47,13 +46,15 @@ class _HomeState extends ConsumerState<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final userAsyncValue = ref.watch(organizationalUserStreamProvider(supabase.auth.currentUser!.id));
+    final userAsyncValue = ref
+        .watch(organizationalUserStreamProvider(supabase.auth.currentUser!.id));
 
     return userAsyncValue.when(
       data: (user) {
         if (user.current_service_id != null && !hasReNavigated) {
           SchedulerBinding.instance.addPostFrameCallback((_) {
-            Navigator.of(context).push(ServiceFlow.route(user.current_service_id));
+            Navigator.of(context)
+                .push(ServiceFlow.route(user.current_service_id));
           });
           hasReNavigated = true;
         }
@@ -66,39 +67,44 @@ class _HomeState extends ConsumerState<Home> {
                 ),
                 backgroundColor: Colors.white,
                 elevation: 0,
-                title: trucks.isNotEmpty ? DropdownButton<String>(
-                  elevation: 2,
-                  enableFeedback: true,
-                  borderRadius: BorderRadius.circular(8),
-                  value: dropdownValue,
-                  icon: const Icon(Icons.arrow_drop_down_rounded, color: Colors.black),
-                  underline: Container(
-                    height: 0,
-                    color: Colors.transparent,
-                  ),
-                  isDense: true,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  onChanged: (String? value) async {
-                    // This is called when the user selects an item.
-                    if (mounted) {
-                      setState(() {
-                        dropdownValue = value!;
-                      });
-                      ref.read(servicesStateProvider.notifier).setTruckID(value!);
-                    }
-                  },
-                  items: trucks.map((Truck truck) {
-                    return DropdownMenuItem<String>(
-                      alignment: Alignment.center,
-                      value: truck.id,
-                      child: Text(truck.name),
-                    );
-                  }).toList(),
-                ) : const Text('Loading...'),
+                title: trucks.isNotEmpty
+                    ? DropdownButton<String>(
+                        elevation: 2,
+                        enableFeedback: true,
+                        borderRadius: BorderRadius.circular(8),
+                        value: dropdownValue,
+                        icon: const Icon(Icons.arrow_drop_down_rounded,
+                            color: Colors.black),
+                        underline: Container(
+                          height: 0,
+                          color: Colors.transparent,
+                        ),
+                        isDense: true,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        onChanged: (String? value) async {
+                          // This is called when the user selects an item.
+                          if (mounted) {
+                            setState(() {
+                              dropdownValue = value!;
+                            });
+                            ref
+                                .read(servicesStateProvider.notifier)
+                                .setTruckID(value!);
+                          }
+                        },
+                        items: trucks.map((Truck truck) {
+                          return DropdownMenuItem<String>(
+                            alignment: Alignment.center,
+                            value: truck.id,
+                            child: Text(truck.name),
+                          );
+                        }).toList(),
+                      )
+                    : const Text('Loading...'),
                 leadingWidth: 75,
                 leading: const Padding(
                   padding: EdgeInsets.only(left: 12),
@@ -119,9 +125,12 @@ class _HomeState extends ConsumerState<Home> {
                         builder: (_) => PlatformAlertDialog(
                           title: const Text('Ready to logout?'),
                           actions: <Widget>[
-                            PlatformDialogAction(child: PlatformText('Cancel'), onPressed: () => Navigator.pop(context)),
                             PlatformDialogAction(
-                              child: PlatformText('Logout', style: const TextStyle(color: Colors.red)),
+                                child: PlatformText('Cancel'),
+                                onPressed: () => Navigator.pop(context)),
+                            PlatformDialogAction(
+                              child: PlatformText('Logout',
+                                  style: const TextStyle(color: Colors.red)),
                               onPressed: () async {
                                 Navigator.pop(context);
                                 await supabase.auth.signOut();
@@ -132,14 +141,16 @@ class _HomeState extends ConsumerState<Home> {
                       );
                     },
                   ),
-                ]
-            ),
-            body: dropdownValue == null ? const Center(child: CircularProgressIndicator()) : const ServicesList()
-        );
+                ]),
+            body: dropdownValue == null
+                ? const Center(child: CircularProgressIndicator())
+                : const ServicesList());
       },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, stack) {
-        return Center(child: Text('Error with realtime connection: ${err.toString()} ${stack.toString()}'));
+        return Center(
+            child: Text(
+                'Error with realtime connection: ${err.toString()} ${stack.toString()}'));
       },
     );
   }
